@@ -44,7 +44,7 @@ echo && echo -e " ${Red_font_prefix}Alea挖矿 一键安装脚本${Font_color_su
  ${Green_font_prefix} 1.安装 git ${Font_color_suffix}
  ${Green_font_prefix} 2.安装 cargo ${Font_color_suffix}
  ${Green_font_prefix} 3.安装 SnarkOS  ${Font_color_suffix}
-${Green_font_prefix} 4.启动 Aleo 挖矿结点  ${Font_color_suffix}
+ ${Green_font_prefix} 4.启动 Aleo 挖矿结点  ${Font_color_suffix}
  ———————————————————————" && echo
 read -e -p " 请输入数字 [1-4]:" num
 case "$num" in
