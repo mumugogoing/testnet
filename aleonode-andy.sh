@@ -31,7 +31,7 @@ install_snarkOS(){
     ./build_ubuntu.sh
     cargo install --path .
 }
-up_node{
+up_node(){
     snarkos account new > ~/snarkOs/aleo.txt
     ./run-prover.sh
 }
