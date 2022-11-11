@@ -36,8 +36,8 @@ up_node(){
     ./run-prover.sh
 }
 
-echo && echo -e " ${Red_font_prefix}Alea挖矿 一键安装脚本${Font_color_suffix} by \033[1;35mDaniel\033[0m
-此脚本完全免费开源，推特关注 ${Green_font_prefix}lovechickenroll获取其他脚本${Font_color_suffix}，
+echo && echo -e " ${Red_font_prefix}Alea挖矿 一键安装脚本${Font_color_suffix} by \033[1;35mAndy\033[0m
+此脚本完全免费开源，推特关注 ${Green_font_prefix}@lovechickenroll获取其他脚本${Font_color_suffix}，
 欢迎关注，如有收费请勿上当受骗。
  ———————————————————————
  ${Green_font_prefix} 1.安装 git ${Font_color_suffix}
@@ -64,5 +64,4 @@ case "$num" in
     echo -e " ${Error} 请输入正确的数字"
     ;;
 esac
-}
 }
