@@ -1,15 +1,17 @@
 #!/bin/bash
-# twitter:   https://twitter.com/lovechickenroll
-# 只精撸
+# aleo testnet3 激励测试一键部署脚本
+# 关注作者twitter:   https://twitter.com/simplefish3
+# 不定期更新撸毛教程
 
 Workspace=/root/aleo-prover
 ScreenName=aleo
 KeyFile="/root/my_aleo_key.txt"
 
 is_root() {
-	[[ $EUID != 0 ]] && echo -e "当前非root用户" && exit 1
+	[[ $EUID != 0 ]] && echo -e "当前非root用户，请执行sudo su命令切换到root用户再继续执行(可能需要输入root用户密码)" && exit 1
 }
 
+# 判断screen是否已存在
 # 0 = 是   1 = 否
 has_screen(){
 	Name=`screen -ls | grep ${ScreenName}`
@@ -36,6 +38,7 @@ has_private_key(){
 	fi
 }
 
+## 生成密钥
 generate_key(){
 	cd ${Workspace}
 	echo "开始生成账户密钥"
@@ -46,13 +49,13 @@ generate_key(){
 }
 
 
-# screen
+# 进入screen环境
 go_into_screen(){
 	screen -D -r ${ScreenName}
 
 }
 
-# 关闭screen
+# 强制关闭screen
 kill_screen(){
 	Name=`screen -ls | grep ${ScreenName}`
         if [ -z "${Name}" ]
@@ -67,15 +70,15 @@ kill_screen(){
         fi
 }
 
-# 安装snarkos
+# 安装依赖以及snarkos
 install_snarkos(){
-	# root
+	# 判断是否为root用户
 	is_root
 
 	mkdir ${Workspace}
         cd ${Workspace}
 
-	# 安装工具
+	# 安装必要的工具
 	sudo apt update
 	sudo apt install git
 
@@ -117,28 +120,31 @@ install_snarkos(){
 	apt install screen
 	echo "screen 安装成功！"
 
+	# 判断当前服务器是否已经有生成密钥，没有则生成一下
 	has_private_key || generate_key
 
 
-	echo “密钥 ${KeyFile}，详细信息：”
+	echo “账户和密钥保存在 ${KeyFile}，请妥善保管，以下是详细信息：”
 	cat ${KeyFile}
 }
 
-# client
+# 运行client节点
 run_client(){
-	echo "client..." && exit 1
+	echo "这次测试不需要跑client..." && exit 1
 }
 
-# prover
+# 运行prover节点
 run_prover(){
 	source $HOME/.cargo/env
 
 	cd ${Workspace}
 
+	# 判断是否已经有screen存在了
         has_screen && echo "执行脚本命令5进入screen查看" && exit 1
+	# 判断是否有密钥
         has_private_key || exit 1
 
-	# screen
+	# 启动一个screen,并在screen中启动prover节点
         screen -dmS ${ScreenName}
 	PrivateKey=$(cat ${KeyFile} | grep "Private key" | awk '{print $3}')
         echo "使用密钥${PrivateKey}启动prover节点"
@@ -148,19 +154,23 @@ run_prover(){
 
         screen -x -S ${ScreenName} -p 0 -X stuff "${cmd}"
         screen -x -S ${ScreenName} -p 0 -X stuff $'\n'
-        echo "可执行脚本命令5 来查看节点运行情况"
+        echo "client节点已在screen中启动，可执行脚本命令5 来查看节点运行情况"
 	
 }
 
+
+
 echo && echo -e " 
-twitter:   https://twitter.com/lovechickenroll
-只精撸
+aleo testnet3 激励测试一键部署脚本
+关注作者twitter:   https://twitter.com/simplefish3
+不定期更新撸毛教程
  ———————————————————————
- 1.install
- 2.prover
- 3.aleo key
- 4.screen
- 5.kill screen
+ 1.安装 aleo
+ 2.运行 prover 节点
+ 3.运行 client 节点 (目前阶段暂时不需要运行client，可跳过)
+ 4.查看 aleo 地址和私钥
+ 5.进入 screen 查看节点的运行情况，注意进入screen后，退出screen的命令是ctrl+A+D
+ 6.强制关闭 screen(使用kill的方式强制关闭screen，谨慎使用)
  ———————————————————————
  " && echo
 
@@ -173,12 +183,15 @@ case "$num" in
     	run_prover
     	;;
 3)
-    	cat ${KeyFile}
+    	run_client
     	;;
 4)
+    	cat ${KeyFile}
+    	;;
+5)
 	go_into_screen
 	;;
-5)	
+6)	
 	kill_screen
 	;;
 
